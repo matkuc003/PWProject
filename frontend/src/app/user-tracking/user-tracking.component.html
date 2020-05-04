@@ -1,0 +1,15 @@
+<div class="container-user-tracker">
+    <div class="form-tracker">
+        <mat-form-field class="login">
+            <mat-label>Login</mat-label>
+            <input matInput name="login" [(ngModel)]="requestUserTracker.login">
+        </mat-form-field>
+        <mat-form-field class="password">
+            <mat-label>Password</mat-label>
+            <input matInput [(ngModel)]="requestUserTracker.password">
+        </mat-form-field>
+        <button mat-raised-button color="primary" class="btn-track" (click)="trackUser()">Track user</button>
+    </div>
+</div>
+
+<div id="map"></div>

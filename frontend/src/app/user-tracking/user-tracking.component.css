@@ -1,0 +1,19 @@
+.container-user-tracker {
+    margin-top: 1em;
+}
+
+.login, .password {
+    width: 40%
+}
+
+.password {
+    margin: 0 4%;
+}
+
+.btn-track {
+    width: 12%;
+}
+
+#map {
+    height: 800px;
+}
