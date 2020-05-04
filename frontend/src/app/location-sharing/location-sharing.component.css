@@ -1,0 +1,18 @@
+.form-location-sharing {
+    margin-top: 1em;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-location-sharing {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.login, .full-name, .password, .btn-share {
+    width: 100%;
+}
+
+.font-bold {
+    font-weight: bold;
+}

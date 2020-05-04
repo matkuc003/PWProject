@@ -1,0 +1,32 @@
+<div class="container-location-sharing">
+    <div class="form-location-sharing" *ngIf="!isShare">
+        <mat-form-field class="login">
+            <mat-label>Login</mat-label>
+            <input matInput name="login" [(ngModel)]="user.login">
+        </mat-form-field>
+        <mat-form-field class="full-name">
+            <mat-label>Full name</mat-label>
+            <input matInput name="full-name" [(ngModel)]="user.fullName">
+        </mat-form-field>
+        <mat-form-field class="password">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hidePassword ? 'password' : 'text'" [(ngModel)]="user.password">
+            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+        </mat-form-field>
+        <button mat-raised-button color="primary" class="btn-share" (click)="share()">Share</button>
+    </div>
+
+    <div class="sharing" *ngIf="isShare">
+        <mat-list class="list-data">
+            <div mat-subheader>You share your location with data:</div>
+            <mat-list-item><span class="font-bold">Login:&nbsp;</span> {{user.login}}</mat-list-item>
+            <mat-list-item><span class="font-bold">Full name:&nbsp;</span> {{user.fullName}}</mat-list-item>
+            <mat-list-item><span class="font-bold">Password:&nbsp;</span> {{user.password}}</mat-list-item>
+            <mat-list-item><span class="font-bold">Current location:&nbsp;</span> {{currentLocation.lat + ", " + currentLocation.lng}}</mat-list-item>
+        </mat-list>
+        <button mat-raised-button color="warn" class="btn-share" (click)="stopShare()">Stop share</button>
+
+    </div>
+</div>
