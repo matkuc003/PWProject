@@ -1,0 +1,84 @@
+<div class="container">
+  <div class="logo">
+    <img src="../assets/map.svg" alt="logo-place-finder">
+    <h1 class="logo-h1">Place Finder</h1>
+  </div>
+
+  <div class="description">
+    <h2>What is it Place Finder?</h2>
+    <p>Place Finder is a application which you allow searching places in your around.
+      Choose location, type of places and entering radius in meters and that's it, now you can browse through places in the nearest area.  </p>
+  </div>
+
+  <div class="location">
+    <h2>Search Place</h2>
+    <mat-form-field class="address">
+      <mat-label>Address</mat-label>
+      <input matInput name="address" [(ngModel)]="requestFind.address">
+    </mat-form-field>
+    <p style="text-align: center;">or</p>
+    <mat-expansion-panel class="panel-map">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Map
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <div id="map"></div>
+
+    </mat-expansion-panel>
+
+    <mat-form-field class="radius">
+      <mat-label>Radius (in meters)</mat-label>
+      <input matInput name="radius" [(ngModel)]="requestFind.radius">
+    </mat-form-field>
+
+    <mat-form-field class="type-places">
+      <mat-label>Type of places</mat-label>
+      <mat-select name="type" [(ngModel)]="requestFind.type">
+        <mat-option *ngFor="let type of typePlaces" [value]="type.value">
+          {{type.value}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="btn-search" (click)="searchPlaces()">Search</button>
+  </div>
+
+  <div class="outputs" [hidden]="dataSource == null || dataSource.filteredData.length == 0">
+    <h2>List of places</h2>
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="address">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rating">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Rating </th>
+        <td mat-cell *matCellDef="let element"> {{element.rating}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="userRatingsTotal">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> User Ratings Total </th>
+        <td mat-cell *matCellDef="let element"> {{element.userRatingsTotal}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="openNow">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Open </th>
+        <td mat-cell *matCellDef="let element"> {{element.openNow}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+  <div class="outputs" *ngIf="dataSource != null && dataSource.filteredData.length == 0">
+    <p class="error">There aren't places in the area</p>
+  </div>
+</div>
+
