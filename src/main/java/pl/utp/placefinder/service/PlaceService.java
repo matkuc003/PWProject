@@ -90,17 +90,6 @@ public class PlaceService {
                     }
                 });
 
-/*        if (response.getStatusCode() == HttpStatus.OK) {
-            String responseString = response.getBody();
-            try {
-@@ -82,7 +111,7 @@ public PlaceService(RestTemplateBuilder restTemplateBuilder) {
-            }
-        } else {
-            System.err.println("Status code is not OK!");
-        }
-        }*/
-
-
         return places;
     }
 
