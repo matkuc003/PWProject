@@ -21,38 +21,6 @@ h1.logo-h1 {
   margin: 1em 0;
 }
 
-.description, .location, .outputs {
+.description, .tabs {
   margin-top: 3em;
-}
-
-.address {
-  width: 100%;
-}
-
-.panel-map {
-  margin-bottom: 2em;
-}
-
-#map {
-  height: 600px;
-}
-
-.type-places, .radius {
-  width: 40%;
-  margin-right: 4%;
-}
-
-.btn-search {
-  width: 12%;
-}
-
-.outputs > table {
-  width: 100%;
-  margin: 3em 0;
-}
-
-.outputs .error {
-  color: #e74c3c;
-  font-size: 18px;
-  margin-bottom: 3em;
 }
