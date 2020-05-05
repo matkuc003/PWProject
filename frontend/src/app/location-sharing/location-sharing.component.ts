@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from "../model/user";
 import {Location} from "../model/location";
 import {Observable} from "rxjs";
+import {UserService} from "../service/user.service";
 
 @Component({
   selector: 'app-location-sharing',
@@ -27,13 +28,18 @@ export class LocationSharingComponent implements OnInit {
   hidePassword: boolean = true;
   locationsSubscription: any;
 
-  constructor() { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
   }
 
   share() {
     this.isShare = true;
+    this.userService.saveUser(this.user).subscribe(next => {
+      this.user = next;
+    }, error => {
+      console.log(error);
+    });
     const locations = new Observable((observer) => {
       let watchId: number;
 
@@ -56,7 +62,7 @@ export class LocationSharingComponent implements OnInit {
 
     let that = this;
     this.locationsSubscription = locations.subscribe({
-      next(position) {
+      next(position: Position) {
         console.log('Current Position: ', position);
         that.currentLocation.lat = position.coords.latitude;
         that.currentLocation.lng = position.coords.longitude;
