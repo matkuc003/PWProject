@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class Location {
     private Double lat;
     private Double lng;
     private LocationType locationType;
-
+    private LocalDateTime date;
     @ManyToOne
     private User user;
 }
