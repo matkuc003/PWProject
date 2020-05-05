@@ -16,4 +16,29 @@
 
 #map {
     height: 800px;
+    margin-top: 1em;
+}
+
+
+@media (max-width: 960px) {
+    .form-tracker {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+        margin: 0 auto;
+     }
+
+    .password {
+        margin: 0;
+    }
+
+    .login, .password, .btn-track {
+        width: 100%;
+    }
+}
+
+@media (max-width: 550px) {
+    .form-tracker {
+        width: 100%;
+    }
 }

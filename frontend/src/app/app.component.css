@@ -1,7 +1,6 @@
 .container {
   width: 60%;
   margin: 0 auto;
-
 }
 
 .logo {
@@ -23,4 +22,37 @@ h1.logo-h1 {
 
 .description, .tabs {
   margin-top: 3em;
+}
+
+.description {
+  text-align: justify;
+}
+
+@media (min-width: 750px) and (max-width: 960px) {
+  .container {
+    width: 80%;
+  }
+}
+
+@media (min-width: 550px) and (max-width: 840px) {
+  .logo {
+    width: 80%;
+  }
+}
+
+@media (max-width: 750px) {
+  .container {
+    width: calc(100% - 2em);
+    margin: 1em;
+  }
+
+  .description {
+    margin-top: 1em;
+  }
+}
+
+@media (max-width: 550px) {
+  .logo {
+    width: 100%;
+  }
 }

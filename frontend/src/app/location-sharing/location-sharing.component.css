@@ -16,3 +16,9 @@
 .font-bold {
     font-weight: bold;
 }
+
+@media (max-width: 550px) {
+    .container-location-sharing {
+        width: 100%;
+    }
+}
