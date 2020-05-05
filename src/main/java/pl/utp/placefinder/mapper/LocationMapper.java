@@ -12,10 +12,14 @@ import java.time.ZoneId;
 @Component
 public class LocationMapper {
     public Location convertToEntity(LocationDTO locationDTO) {
-        Instant instant = Instant.ofEpochMilli(Long.parseLong(locationDTO.getDate()));
-        LocalDateTime date = instant.atZone(ZoneId.of("Poland")).toLocalDateTime();
-
+        LocalDateTime date = mapStringToDateTime(locationDTO.getDate());
         return new Location(0l, locationDTO.getLat(), locationDTO.getLng(), LocationType.valueOf(locationDTO.getLocationType()),
                 date, locationDTO.getUser());
+    }
+
+    public LocalDateTime mapStringToDateTime(String dateTime) {
+        Instant instant = Instant.ofEpochMilli(Long.parseLong(dateTime));
+        LocalDateTime date = instant.atZone(ZoneId.of("Poland")).toLocalDateTime();
+        return date;
     }
 }
