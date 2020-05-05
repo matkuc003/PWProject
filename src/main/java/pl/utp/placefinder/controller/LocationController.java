@@ -8,6 +8,7 @@ import pl.utp.placefinder.model.User;
 import pl.utp.placefinder.service.LocationService;
 import pl.utp.placefinder.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ public class LocationController {
 
         Location currentLocation;
         if (locationList.size() == 0) {
-            currentLocation = new Location(0L, lat, lng, LocationType.CURRENT_LOCATION, user);
+            currentLocation = new Location(0L, lat, lng, LocationType.CURRENT_LOCATION, LocalDateTime.now(), user);
         } else {
             currentLocation = locationList.get(0);
             currentLocation.setLng(lat);

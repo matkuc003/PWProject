@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {User} from "../model/user";
 import {Location} from "../model/location";
 import {Observable} from "rxjs";
+import {environment} from "../../environments/environment";
+import * as Stomp from 'stompjs';
+import * as SockJS from 'sockjs-client';
 import {UserService} from "../service/user.service";
 
 @Component({
@@ -10,6 +13,8 @@ import {UserService} from "../service/user.service";
   styleUrls: ['./location-sharing.component.css']
 })
 export class LocationSharingComponent implements OnInit {
+  private serverUrl = environment.mainURL + "/track";
+  private stompClient;
 
   user: User = {
     login: "",
@@ -21,6 +26,7 @@ export class LocationSharingComponent implements OnInit {
     lat: 0,
     lng: 0,
     date: "",
+    locationType: "CURRENT_LOCATION",
     user: this.user
   };
 
@@ -31,6 +37,7 @@ export class LocationSharingComponent implements OnInit {
   constructor(private userService: UserService) { }
 
   ngOnInit() {
+    this.stompClient = Stomp.over(new SockJS(this.serverUrl));
   }
 
   share() {
@@ -76,7 +83,7 @@ export class LocationSharingComponent implements OnInit {
   }
 
   sendLocation() {
-    // TODO send location to backend
+    this.stompClient.send("/app/track/" + this.user.login, {}, JSON.stringify(this.currentLocation));
   }
 
   stopShare() {
