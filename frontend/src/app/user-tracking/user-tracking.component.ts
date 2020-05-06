@@ -1,14 +1,15 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Injectable, OnInit} from '@angular/core';
 import {User} from "../model/user";
 import {Location} from "../model/location";
 import {environment} from "../../environments/environment";
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {UserService} from "../service/user.service";
-
 declare var showMap: any;
 declare var addLocationToMap: any;
-
+@Injectable({
+    providedIn: 'root'
+})
 @Component({
   selector: 'app-user-tracking',
   templateUrl: './user-tracking.component.html',
@@ -17,7 +18,6 @@ declare var addLocationToMap: any;
 export class UserTrackingComponent implements OnInit {
   private serverUrl = environment.mainURL + "/track";
   private stompClient;
-
   user: User = {
       login: "",
       fullName: "",
@@ -47,6 +47,7 @@ export class UserTrackingComponent implements OnInit {
 
       }, error => {
           console.log(error);
+          alert("Authorization error!");
           console.log("Authorization error");
       });
 
@@ -72,6 +73,13 @@ export class UserTrackingComponent implements OnInit {
   }
 
   trackDisconnect() {
-      this.stompClient.disconnect("/location/" + this.user.login);
+      //TODO typeError: Cannot read property 'disconnect' of undefined
+      // There is a problem with disconnect because client in trackObserver() is private so this client is not the same.
+
+      let client = this.stompClient;
+      client.disconnect(function() {
+          alert("See you next time!");
+      });
+      console.log("Location sharing stopped");
   }
 }
