@@ -4,6 +4,7 @@ import {Location} from "../model/location";
 import {environment} from "../../environments/environment";
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
+import {UserService} from "../service/user.service";
 
 declare var showMap: any;
 declare var addLocationToMap: any;
@@ -31,18 +32,25 @@ export class UserTrackingComponent implements OnInit {
       user: this.user
   };
 
-  constructor() { }
+    constructor(private userService: UserService) { }
 
   ngOnInit() {
 
   }
 
   trackUser() {
-    //TODO send request about track user (checking login and password on backend)
-    new showMap(53, 0);
-    this.trackObserver();
-  }
+      this.userService.checkUser(this.user).subscribe(next => {
+          console.log(next);
+          console.log("Authorization successful")
+          new showMap(53, 0);
+          this.trackObserver();
 
+      }, error => {
+          console.log(error);
+          console.log("Authorization error");
+      });
+
+  }
   trackObserver() {
     let ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);

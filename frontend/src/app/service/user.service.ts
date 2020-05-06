@@ -8,12 +8,17 @@ import {Observable} from "rxjs";
   providedIn: 'root'
 })
 export class UserService {
-  private USER_URL = environment.mainURL + "/api/user";
+  private USER_URL = environment.mainURL + "/api/user/create";
   private SAVE_USER = this.USER_URL;
+  private checkURL = environment.mainURL + "/api/user/check";
 
   constructor(private http: HttpClient) { }
 
   saveUser(user: User): Observable<User> {
     return this.http.post<User>(this.SAVE_USER, user);
+  }
+  checkUser(user:User): Observable<boolean>{
+
+    return this.http.post<boolean>(this.checkURL,user);
   }
 }

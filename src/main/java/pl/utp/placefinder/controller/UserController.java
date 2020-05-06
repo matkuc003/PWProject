@@ -38,7 +38,7 @@ public class UserController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<User> createUser(@RequestBody User user) {
 
         String login = user.getLogin();
@@ -56,5 +56,20 @@ public class UserController {
 
         userService.createUser(new User(0l, login, fullName, password));
         return new ResponseEntity<>(user, HttpStatus.CREATED);
+    }
+    @PostMapping("/check")
+    public ResponseEntity<Boolean> checkUser(@RequestBody User user)
+    {
+        String passwordToCheck = user.getPassword();
+        String loginToCheck = user.getLogin();
+        User userInDB = userService.getUserByLogin(loginToCheck).get();
+        if(userInDB.getLogin().equals(loginToCheck) && userInDB.getPassword().equals(passwordToCheck))
+        {
+            return new ResponseEntity<>(true,HttpStatus.OK);
+        }
+        else
+        {
+            return new ResponseEntity<>(false,HttpStatus.EXPECTATION_FAILED);
+        }
     }
 }
