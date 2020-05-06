@@ -89,5 +89,11 @@ export class LocationSharingComponent implements OnInit {
   stopShare() {
     this.isShare = false;
     this.locationsSubscription.unsubscribe();
+    this.userService.deleteUser(this.user).subscribe(next => {
+      console.log('User deleted from database: ', next);
+    }, error => {
+      console.log(error);
+      console.log('User deleted from database: error');
+    });
   }
 }

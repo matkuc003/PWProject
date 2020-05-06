@@ -47,7 +47,10 @@ public class LocationService {
     public void deleteLocation(long id) {
         locationRepository.deleteById(id);
     }
-
+    public void deleteLocationByUser(User user) {
+        List<Location> locations = locationRepository.findAllByUser(user);
+        locations.stream().forEach(l->locationRepository.delete(l));
+    }
     public List<Location> getAllByUser(User user) {
         return locationRepository.findAllByUser(user);
     }

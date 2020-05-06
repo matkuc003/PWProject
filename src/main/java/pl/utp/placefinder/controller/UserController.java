@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.utp.placefinder.model.User;
+import pl.utp.placefinder.service.LocationService;
 import pl.utp.placefinder.service.UserService;
 
 import java.util.List;
@@ -16,10 +17,12 @@ import java.util.Optional;
 public class UserController {
 
     private UserService userService;
+    private LocationService locationService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, LocationService locationService) {
         this.userService = userService;
+        this.locationService=locationService;
     }
 
     @GetMapping("/all")
@@ -71,5 +74,23 @@ public class UserController {
         {
             return new ResponseEntity<>(false,HttpStatus.EXPECTATION_FAILED);
         }
+    }
+    @PostMapping("/delete")
+    public ResponseEntity<Boolean> deleteUser(@RequestBody User user)
+    {
+
+        try{
+            User userToDelete = userService.getUserByLogin(user.getLogin()).get();
+            locationService.deleteLocationByUser(userToDelete);
+            long userId = userService.getUserByLogin(user.getLogin()).get().getId();
+            userService.deleteUser(userId);
+            return new ResponseEntity<>(true,HttpStatus.OK);
+        }
+        catch(RuntimeException e){
+            e.printStackTrace();
+            return new ResponseEntity<>(false,HttpStatus.EXPECTATION_FAILED);
+
+        }
+
     }
 }

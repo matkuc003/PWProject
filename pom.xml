@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pl.utp</groupId>
-    <artifactId>place_finder</artifactId>
+    <artifactId>pwproject</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>place_finder</name>
+    <name>pwproject</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
