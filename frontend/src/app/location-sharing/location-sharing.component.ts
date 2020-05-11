@@ -1,4 +1,4 @@
-import {Component, Injectable, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {User} from "../model/user";
 import {Location} from "../model/location";
 import {Observable} from "rxjs";
@@ -6,7 +6,7 @@ import {environment} from "../../environments/environment";
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {UserService} from "../service/user.service";
-import {UserTrackingComponent} from "../user-tracking/user-tracking.component"
+
 @Component({
   selector: 'app-location-sharing',
   templateUrl: './location-sharing.component.html',
@@ -34,8 +34,7 @@ export class LocationSharingComponent implements OnInit {
   hidePassword: boolean = true;
   locationsSubscription: any;
 
-  constructor(private userService: UserService,
-              private userTrackingComponent: UserTrackingComponent) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
     this.stompClient = Stomp.over(new SockJS(this.serverUrl));
@@ -43,7 +42,6 @@ export class LocationSharingComponent implements OnInit {
 
   share() {
     this.isShare = true;
-    //TODO validation user
     this.userService.saveUser(this.user).subscribe(next => {
       this.user = next;
     }, error => {
@@ -90,13 +88,11 @@ export class LocationSharingComponent implements OnInit {
 
   stopShare() {
     this.isShare = false;
-   // this.userTrackingComponent.trackDisconnect();
     this.locationsSubscription.unsubscribe();
     this.userService.deleteUser(this.user).subscribe(next => {
-      console.log('User deleted from database: ', next);
+
     }, error => {
       console.log(error);
-      console.log('User deleted from database: error');
     });
   }
 }

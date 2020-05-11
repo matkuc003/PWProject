@@ -5,8 +5,11 @@ import {environment} from "../../environments/environment";
 import * as Stomp from 'stompjs';
 import * as SockJS from 'sockjs-client';
 import {UserService} from "../service/user.service";
+
 declare var showMap: any;
 declare var addLocationToMap: any;
+declare var removeMarker: any;
+
 @Injectable({
     providedIn: 'root'
 })
@@ -18,6 +21,10 @@ declare var addLocationToMap: any;
 export class UserTrackingComponent implements OnInit {
   private serverUrl = environment.mainURL + "/track";
   private stompClient;
+
+  isTracking: boolean = false;
+  firstShowMap: boolean = false;
+
   user: User = {
       login: "",
       fullName: "",
@@ -32,7 +39,7 @@ export class UserTrackingComponent implements OnInit {
       user: this.user
   };
 
-    constructor(private userService: UserService) { }
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
 
@@ -40,18 +47,16 @@ export class UserTrackingComponent implements OnInit {
 
   trackUser() {
       this.userService.checkUser(this.user).subscribe(next => {
-          console.log(next);
-          console.log("Authorization successful")
-          new showMap(53, 0);
+          if(!this.firstShowMap) {
+            new showMap(53, 0);
+            this.firstShowMap = true;
+          }
           this.trackObserver();
-
       }, error => {
-          console.log(error);
           alert("Authorization error!");
-          console.log("Authorization error");
       });
-
   }
+
   trackObserver() {
     let ws = new SockJS(this.serverUrl);
     this.stompClient = Stomp.over(ws);
@@ -59,27 +64,27 @@ export class UserTrackingComponent implements OnInit {
     let that = this;
     client.connect({}, function (frame) {
       client.subscribe("/location/"+that.user.login, function (message) {
-          that.currentLocation = {
-              lat: JSON.parse(message.body).lat,
-              lng: JSON.parse(message.body).lng,
-              date: JSON.parse(message.body).date,
-              locationType: JSON.parse(message.body).locationType,
-              user: JSON.parse(message.body).user
-          };
-          console.log(that.currentLocation);
-          new addLocationToMap(that.currentLocation);
+          if(message.body == "end") {
+              that.trackDisconnect();
+          } else {
+              that.currentLocation = {
+                  lat: JSON.parse(message.body).lat,
+                  lng: JSON.parse(message.body).lng,
+                  date: JSON.parse(message.body).date,
+                  locationType: JSON.parse(message.body).locationType,
+                  user: JSON.parse(message.body).user
+              };
+              console.log(that.currentLocation);
+              new addLocationToMap(that.currentLocation);
+          }
       });
     });
+    this.isTracking = true;
   }
 
   trackDisconnect() {
-      //TODO typeError: Cannot read property 'disconnect' of undefined
-      // There is a problem with disconnect because client in trackObserver() is private so this client is not the same.
-
-      let client = this.stompClient;
-      client.disconnect(function() {
-          alert("See you next time!");
-      });
-      console.log("Location sharing stopped");
+    this.stompClient.disconnect("/location/" + this.user.login);
+    this.isTracking = false;
+    new removeMarker();
   }
 }

@@ -1,5 +1,5 @@
 <div class="container-user-tracker">
-    <div class="form-tracker">
+    <div class="form-tracker" *ngIf="!isTracking">
         <mat-form-field class="login">
             <mat-label>Login</mat-label>
             <input matInput name="login" [(ngModel)]="user.login">
@@ -9,6 +9,10 @@
             <input matInput [type]="'password'" [(ngModel)]="user.password">
         </mat-form-field>
         <button mat-raised-button color="primary" class="btn-track" (click)="trackUser()">Track user</button>
+    </div>
+    <div class="info-tracker" *ngIf="isTracking">
+        You follow the user {{user.login}}.
+        <button mat-raised-button color="warn" class="btn-track" (click)="trackDisconnect()">Stop track</button>
     </div>
 </div>
 

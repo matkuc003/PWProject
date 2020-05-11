@@ -19,6 +19,19 @@
     margin-top: 1em;
 }
 
+.info-tracker {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.info-tracker > button {
+    margin-top: 1em;
+    width: 100%;
+}
+
 
 @media (max-width: 960px) {
     .form-tracker {
@@ -38,7 +51,7 @@
 }
 
 @media (max-width: 550px) {
-    .form-tracker {
+    .form-tracker, .info-tracker {
         width: 100%;
     }
 }

@@ -3,6 +3,7 @@ package pl.utp.placefinder.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import pl.utp.placefinder.model.User;
 import pl.utp.placefinder.service.LocationService;
@@ -18,11 +19,13 @@ public class UserController {
 
     private UserService userService;
     private LocationService locationService;
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @Autowired
-    public UserController(UserService userService, LocationService locationService) {
+    public UserController(UserService userService, LocationService locationService, SimpMessagingTemplate simpMessagingTemplate) {
         this.userService = userService;
-        this.locationService=locationService;
+        this.locationService = locationService;
+        this.simpMessagingTemplate = simpMessagingTemplate;
     }
 
     @GetMapping("/all")
@@ -65,32 +68,29 @@ public class UserController {
     {
         String passwordToCheck = user.getPassword();
         String loginToCheck = user.getLogin();
-        User userInDB = userService.getUserByLogin(loginToCheck).get();
-        if(userInDB.getLogin().equals(loginToCheck) && userInDB.getPassword().equals(passwordToCheck))
-        {
+        Optional<User> userInDB = userService.getUserByLogin(loginToCheck);
+        if(!userInDB.isPresent())
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+
+        if(userInDB.get().getLogin().equals(loginToCheck) && userInDB.get().getPassword().equals(passwordToCheck))
             return new ResponseEntity<>(true,HttpStatus.OK);
-        }
         else
-        {
             return new ResponseEntity<>(false,HttpStatus.EXPECTATION_FAILED);
-        }
     }
     @PostMapping("/delete")
     public ResponseEntity<Boolean> deleteUser(@RequestBody User user)
     {
-
         try{
             User userToDelete = userService.getUserByLogin(user.getLogin()).get();
             locationService.deleteLocationByUser(userToDelete);
             long userId = userService.getUserByLogin(user.getLogin()).get().getId();
             userService.deleteUser(userId);
+            simpMessagingTemplate.convertAndSend("/location/"+user.getLogin(), "end");
             return new ResponseEntity<>(true,HttpStatus.OK);
         }
         catch(RuntimeException e){
             e.printStackTrace();
             return new ResponseEntity<>(false,HttpStatus.EXPECTATION_FAILED);
-
         }
-
     }
 }

@@ -18,6 +18,13 @@ function showMap(lat, long) {
   }).addTo(map);
 }
 
+function removeMarker() {
+  if(marker != null) {
+    marker.remove();
+    marker = null;
+  }
+}
+
 function addLocationToMap(location) {
   if(marker != null)
     marker.remove();
