@@ -26,7 +26,6 @@ export class LocationSharingComponent implements OnInit {
     lat: 0,
     lng: 0,
     date: "",
-    locationType: "CURRENT_LOCATION",
     user: this.user
   };
 

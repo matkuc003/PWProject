@@ -6,13 +6,11 @@ import org.springframework.stereotype.Service;
 import pl.utp.placefinder.mapper.LocationMapper;
 import pl.utp.placefinder.model.Location;
 import pl.utp.placefinder.model.LocationDTO;
-import pl.utp.placefinder.model.LocationType;
 import pl.utp.placefinder.model.User;
 import pl.utp.placefinder.repository.LocationRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class LocationService {
@@ -47,6 +45,7 @@ public class LocationService {
     public void deleteLocation(long id) {
         locationRepository.deleteById(id);
     }
+
     public void deleteLocationByUser(User user) {
         List<Location> locations = locationRepository.findAllByUser(user);
         locations.stream().forEach(l->locationRepository.delete(l));
@@ -55,25 +54,13 @@ public class LocationService {
         return locationRepository.findAllByUser(user);
     }
 
-    public Location updateCurrentLocation(LocationDTO locationDTO) {
+    public Location addLocation(LocationDTO locationDTO) {
         User user = userService.findByLogin(locationDTO.getUser().getLogin()).get();
         locationDTO.setUser(user);
-        List<Location> locationList = getAllByUser(user)
-                .stream()
-                .filter(location -> location.getLocationType().equals(LocationType.CURRENT_LOCATION))
-                .collect(Collectors.toList());
 
-        Location currentLocation;
-        if (locationList.size() == 0) {
-            currentLocation = locationMapper.convertToEntity(locationDTO);
-        } else {
-            currentLocation = locationList.get(0);
-            currentLocation.setLng(locationDTO.getLng());
-            currentLocation.setLat(locationDTO.getLat());
-            currentLocation.setDate(locationMapper.mapStringToDateTime(locationDTO.getDate()));
-        }
+        Location location = locationMapper.convertToEntity(locationDTO);
+        location = createLocation(location);
 
-        currentLocation = updateLocation(currentLocation);
-        return currentLocation;
+        return location;
     }
 }

@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 public class LocationDTO {
     private Double lat;
     private Double lng;
-    private String locationType;
     private String date;
     private User user;
 }

@@ -9,6 +9,7 @@ import {UserService} from "../service/user.service";
 declare var showMap: any;
 declare var addLocationToMap: any;
 declare var removeMarker: any;
+declare var drawPathOfLocations: any;
 
 @Injectable({
     providedIn: 'root'
@@ -22,6 +23,7 @@ export class UserTrackingComponent implements OnInit {
   private serverUrl = environment.mainURL + "/track";
   private stompClient;
 
+  locations: Location[] = [];
   isTracking: boolean = false;
   firstShowMap: boolean = false;
 
@@ -35,7 +37,6 @@ export class UserTrackingComponent implements OnInit {
       lat: 0,
       lng: 0,
       date: "",
-      locationType: "",
       user: this.user
   };
 
@@ -71,11 +72,11 @@ export class UserTrackingComponent implements OnInit {
                   lat: JSON.parse(message.body).lat,
                   lng: JSON.parse(message.body).lng,
                   date: JSON.parse(message.body).date,
-                  locationType: JSON.parse(message.body).locationType,
                   user: JSON.parse(message.body).user
               };
-              console.log(that.currentLocation);
+              that.locations.push(that.currentLocation);
               new addLocationToMap(that.currentLocation);
+              new drawPathOfLocations(that.locations);
           }
       });
     });
@@ -86,5 +87,6 @@ export class UserTrackingComponent implements OnInit {
     this.stompClient.disconnect("/location/" + this.user.login);
     this.isTracking = false;
     new removeMarker();
+    this.locations = [];
   }
 }

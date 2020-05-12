@@ -24,7 +24,7 @@ public class WebSocketController {
     @MessageMapping("/track/{login}")
     @SendTo("/location/{login}")
     public Location getLocation(@DestinationVariable String login, LocationDTO location) {
-        return locationService.updateCurrentLocation(location);
+        return locationService.addLocation(location);
     }
 
 }

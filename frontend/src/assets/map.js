@@ -1,5 +1,6 @@
 var map;
 var marker = null;
+var pathLine = null;
 
 var redIcon = new L.Icon({
   iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
@@ -23,6 +24,11 @@ function removeMarker() {
     marker.remove();
     marker = null;
   }
+
+  if(pathLine != null) {
+    pathLine.remove();
+    pathLine = null;
+  }
 }
 
 function addLocationToMap(location) {
@@ -34,4 +40,23 @@ function addLocationToMap(location) {
         "<br>Date: " + location.date)
     .openPopup();
     map.panTo([location.lat, location.lng], 10);
+}
+
+function drawPathOfLocations(locations) {
+  if(pathLine!=null)
+    pathLine.remove();
+  if(locations.length > 1) {
+    var data = connectTheDots(locations);
+    pathLine = L.polyline(data).addTo(map);
+  }
+}
+
+function connectTheDots(data){
+  var c = [];
+  for(i in data) {
+    var x = data[i].lat;
+    var y = data[i].lng;
+    c.push([x, y]);
+  }
+  return c;
 }

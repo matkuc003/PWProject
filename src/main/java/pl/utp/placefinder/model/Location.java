@@ -21,7 +21,6 @@ public class Location {
 
     private Double lat;
     private Double lng;
-    private LocationType locationType;
     private LocalDateTime date;
     @ManyToOne
     private User user;

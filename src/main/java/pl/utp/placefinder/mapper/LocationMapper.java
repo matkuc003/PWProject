@@ -3,7 +3,6 @@ package pl.utp.placefinder.mapper;
 import org.springframework.stereotype.Component;
 import pl.utp.placefinder.model.Location;
 import pl.utp.placefinder.model.LocationDTO;
-import pl.utp.placefinder.model.LocationType;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -13,8 +12,7 @@ import java.time.ZoneId;
 public class LocationMapper {
     public Location convertToEntity(LocationDTO locationDTO) {
         LocalDateTime date = mapStringToDateTime(locationDTO.getDate());
-        return new Location(0l, locationDTO.getLat(), locationDTO.getLng(), LocationType.valueOf(locationDTO.getLocationType()),
-                date, locationDTO.getUser());
+        return new Location(0l, locationDTO.getLat(), locationDTO.getLng(), date, locationDTO.getUser());
     }
 
     public LocalDateTime mapStringToDateTime(String dateTime) {
