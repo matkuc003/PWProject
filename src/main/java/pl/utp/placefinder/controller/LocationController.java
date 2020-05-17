@@ -38,4 +38,9 @@ public class LocationController {
         return locationService.getAllByUser(userService.getUserByLogin(login).get());
     }
 
+    @GetMapping("/distanceBetweenLocation")
+    public double distanceBetweenLocation(double lat1, double lat2, double lon1, double lon2) {
+        return locationService.distanceBetweenLocation(lat1, lat2, lon1, lon2);
+    }
+
 }
